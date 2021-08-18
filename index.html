@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="./assets/reset.css">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="./assets/style.css">
+
+   
+  <title>Gif Finder</title>
+</head>
+<body id="body" class="bg-success p-2 text-white bg-opacity-75">
+  <div class="p-3 mb-2 bg-dark text-white">
+    <main>
+      <form>
+        <lable for="search">Search</lable>
+        <input type="search" id="search">
+        <button id="btnSearch">Go</button>
+        <div class="out"></div>
+      </form>
+    </main>
+  </div>
+
+
+
+  <script>
+
+    
+    
+    
+
+    let APIKEY = "CS6QjFrHHheclRRQMySv6oxbO1UGKKYq";
+
+    document.addEventListener("DOMContentLoaded", init);
+      function init() {
+        document.getElementById("btnSearch").addEventListener("click", ev => {
+          ev.preventDefault(); //to stop the page reload
+          let url = `https://api.giphy.com/v1/gifs/search?api_key=${APIKEY}&limit=1&q=`;
+          let str = document.getElementById("search").value.trim();
+          url = url.concat(str);
+          console.log(url);
+          fetch(url)
+            .then(response => response.json())
+            .then(content => {
+              //  data, pagination, meta
+              console.log(content.data);
+              console.log("META", content.meta);
+              let fig = document.createElement("figure");
+              let img = document.createElement("img");
+              let fc = document.createElement("figcaption");
+              img.src = content.data[0].images.downsized.url;
+              img.alt = content.data[0].title;
+              fc.textContent = content.data[0].title;
+              fig.appendChild(img);
+              fig.appendChild(fc);
+              let out = document.querySelector(".out");
+              out.insertAdjacentElement("afterbegin", fig);
+              document.querySelector("#search").value = "";
+            })
+            .catch(err => {
+              console.error(err);
+            });
+        });
+      }
+
+      
+
+  </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+
+</body>
+</html>
